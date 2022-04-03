@@ -12,16 +12,43 @@ export class AppComponent {
   employees = [
     {name:"example", position:"example", email:"examplej@gmail.com"}
   ]
+
   model:any = {}
   model2:any = {}
-  newUsers;
-
+  
+  localStorageItem;
+  newUsers:string[] = [];
+  parsedUsers;
 
   addEmployee():void{
     this.employees.push(this.model)
+
+    /*
+    * aqui revisamos si ya existe un localStorage con el nombre de USERS
+    * y si no existe lo inicializamos y luego asignamos ese valor a la variable
+    * localStorageItem para que ya no entre en ese scope y no vuelva a crear el 
+    * localStorage
+    */
+    this.localStorageItem  = localStorage.getItem("USERS");
+
+    if(this.localStorageItem === null){
+      this.newUsers.push(this.model)
+      localStorage.setItem("USERS", JSON.stringify(this.newUsers))
+      this.localStorageItem  = localStorage.getItem("USERS")
+      this.parsedUsers = this.newUsers;
+      console.log("USERS creado")
+    } else {
+      this.parsedUsers = JSON.parse(this.localStorageItem!)
+      this.parsedUsers.push(this.model)
+      localStorage.setItem("USERS", JSON.stringify(this.parsedUsers))
+      console.log(this.parsedUsers)
+    }
+    
     this.model = {}
     this.message = "saved succesfully"
   }
+
+
 
   deleteEmployee(i):void{
     let answer = confirm("Estas seguro de querer eliminarlo?")
@@ -30,6 +57,7 @@ export class AppComponent {
       this.message = "deleted succesfully"
     }
   }
+  
   myvalue;
   editEmployee(i):void{
     this.hiddeUpdate = false;
