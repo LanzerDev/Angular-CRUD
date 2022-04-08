@@ -1,4 +1,5 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { User } from 'src/model/users';
 
 @Component({
   selector: 'app-root',
@@ -6,81 +7,74 @@ import { Component, OnInit} from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'CRUD';
+  title = 'LOCAL STORAGE CRUD';
   message = "";
+
   hiddeUpdate: boolean = true;
-  employees = [
-    {name:"example", position:"example", email:"examplej@gmail.com"}
-  ]
-
-  model:any = {}
-  model2:any = {}
-  
-  localStorageItem;
-  newUsers:string[] = [];
-  parsedUsers;
-
-  addEmployee():void{
-    this.employees.push(this.model)
-
-    /*
-    * aqui revisamos si ya existe un localStorage con el nombre de USERS
-    * y si no existe lo inicializamos y luego asignamos ese valor a la variable
-    * localStorageItem para que ya no entre en ese scope y no vuelva a crear el 
-    * localStorage
-    */
-    this.localStorageItem  = localStorage.getItem("USERS");
-
-    if(this.localStorageItem === null){
-      this.newUsers.push(this.model)
-      localStorage.setItem("USERS", JSON.stringify(this.newUsers))
-      this.localStorageItem  = localStorage.getItem("USERS")
-      this.parsedUsers = this.newUsers;
-      console.log("USERS creado")
-    } else {
-      this.parsedUsers = JSON.parse(this.localStorageItem!)
-      this.parsedUsers.push(this.model)
-      localStorage.setItem("USERS", JSON.stringify(this.parsedUsers))
-      console.log(this.parsedUsers)
-    }
-    
-    this.model = {}
-    this.message = "saved succesfully"
-  }
-
-
-
-  deleteEmployee(i):void{
-    let answer = confirm("Estas seguro de querer eliminarlo?")
-    if (answer){
-      this.employees.splice(i, 1)
-      this.message = "deleted succesfully"
-    }
-  }
-  
+  users: User[];
   myvalue;
-  editEmployee(i):void{
-    this.hiddeUpdate = false;
-    this.model2.name = this.employees[i].name;
-    this.model2.position = this.employees[i].position;
-    this.model2.email = this.employees[i].email;
-    this.myvalue = i;
+  constructor() {
+    this.users = []
   }
 
-  updateEmployee():void{
+  DataModel: any = {}
+  UpdateModel: any = {}
+
+  ngOnInit() {
+    this.getUser()
+  }
+
+
+  getUser(): User[] {
+    if (localStorage.getItem("users") === null) {
+      this.users = []
+    } else {
+      this.users = JSON.parse(localStorage.getItem("users")!)
+    }
+    return this.users
+  }
+  addUser(form) {
+    this.users.push(this.DataModel)
+    localStorage.setItem("users", JSON.stringify(this.users))
+    form.reset()
+    this.getUser()
+  }
+ 
+  editUser(index) {
+    console.log(this.users[index])
+    this.hiddeUpdate = false;
+    this.UpdateModel.name = this.users[index].name;
+    this.UpdateModel.position = this.users[index].position;
+    this.UpdateModel.email = this.users[index].email;
+    this.myvalue = index;
+  }
+  updateUser() {
     let i = this.myvalue;
-    for(let j=0; j < this.employees.length; j++){
+    for(let j=0; j < this.users.length; j++){
       if (j == i){
-        this.employees[i] = this.model2;
-        this.model2 = {}
+        this.users[i] = this.UpdateModel;
+        localStorage.setItem("users", JSON.stringify(this.users))
+        this.UpdateModel = {}
         this.message = "update succesfull"
         this.hiddeUpdate = true;
+        this.getUser()
       }
     }
   }
-  closeAlert(){
+  
+  deleteUser(index) {
+    const result = confirm("seguro de querer eliminar a este empleado?");
+    if(result == true){
+      this.users.splice(index, 1)
+      localStorage.setItem("users", JSON.stringify(this.users))
+    }
+    
+  }
+
+
+  closeAlert() {
     this.message = ""
   }
-  
+
 
 }

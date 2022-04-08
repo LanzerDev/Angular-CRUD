@@ -21,14 +21,14 @@
 
     <div class="row">
         <div class="col-sm-8">
-            <h2>Create data</h2>
-            <form action="" class="form-horizontal">
+            <h2>Create user</h2>
+            <form #myForm="ngForm" (ngSubmit)="addUser(myForm)" class="form-horizontal">
                 <div class="form-group">
                     <label for="name" class="control-label col-sm-2">
                         name
                     </label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="name" name="name" [(ngModel)]="model.name"
+                        <input type="text" class="form-control" id="name" name="name" [(ngModel)]="DataModel.name"
                             placeholder="Enter a new name">
                     </div>
                 </div>
@@ -38,7 +38,7 @@
                     </label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control" id="position" name="position"
-                            [(ngModel)]="model.position" placeholder="Enter a new position">
+                            [(ngModel)]="DataModel.position" placeholder="Enter a new position">
                     </div>
                 </div>
                 <div class="form-group">
@@ -46,13 +46,13 @@
                         email
                     </label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="email" name="email" [(ngModel)]="model.email"
+                        <input type="text" class="form-control" id="email" name="email" [(ngModel)]="DataModel.email"
                             placeholder="Enter a new email">
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-10 col-sm-offset-2">
-                        <button (click)="addEmployee()" type="submit" class="btn btn-success">
+                        <button type="submit" class="btn btn-primary mt-2 float-end btn-lg">
                             Save
                         </button>
                     </div>
@@ -63,7 +63,7 @@
     </div>
     <div class="row">
         <div class="col-sm-8">
-            <h2>Read data</h2>
+            <h2>Users</h2>
             <table class="table table-bordered">
                 <thead>
                     <th>Name</th>
@@ -71,20 +71,20 @@
                     <th>Actions</th>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let employee of employees; let i = index">
-                        <td>{{employee.name}}</td>
-                        <td>{{employee.position}}</td>
-                        <td>{{employee.email}}</td>
+                    <tr *ngFor="let user of users; let i = index">
+                        <td>{{user.name}}</td>
+                        <td>{{user.position}}</td>
+                        <td>{{user.email}}</td>
                         <td>
-                            <a (click)="editEmployee(i)" class="btn btn-success">Edit</a>
-                            <a (click)="deleteEmployee(i)" class="btn btn-danger">Delete</a>
+                            <a (click)="editUser(i)" class="btn btn-success me-2">Edit</a>
+                            <a (click)="deleteUser(i)" class="btn btn-danger">Delete</a>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
         <div class="col-sm-4" [hidden]="hiddeUpdate">
-            <h2>Update data</h2>
+            <h2>Update user</h2>
             <form action="" class="form-horizontal">
                 <div class="form-group">
                     <label for="name" class="control-label col-sm-2">
@@ -92,7 +92,7 @@
                     </label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control" id="name" name="name"
-                        [(ngModel)]="model2.name"
+                        [(ngModel)]="UpdateModel.name"
                         placeholder="Update name">
                     </div>
                 </div>
@@ -102,7 +102,7 @@
                     </label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control" id="position" name="position"
-                        [(ngModel)]="model2.position"
+                        [(ngModel)]="UpdateModel.position"
                         placeholder="Update position">
                     </div>
                 </div>
@@ -112,13 +112,13 @@
                     </label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control" id="email" name="email"
-                        [(ngModel)]="model2.email"
+                        [(ngModel)]="UpdateModel.email"
                         placeholder="Update email">
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-10 col-sm-offset-2">
-                        <button (click)="updateEmployee()" type="submit" class="btn btn-success">
+                        <button (click)="updateUser()" type="submit" class="btn btn-success">
                             Update
                         </button>
                     </div>
